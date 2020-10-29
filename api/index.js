@@ -3,7 +3,8 @@
 var mongoose = require('mongoose');
 var app = require('./app');
 var port = process.env.PORT || 3797;
-var url = process.env.MONGODB_URI || 'mongodb+srv://itproduction:ITEBM123+@mit-argentina.kwt3z.mongodb.net/dbmit-argentina?retryWrites=true&w=majority'
+//var url = 'mongodb+srv://itproduction:ITEBM123+@mit-argentina.kwt3z.mongodb.net/dbmit-argentina?retryWrites=true&w=majority'
+var url = 'mongodb://localhost:27017/dbmusify'
 
 mongoose.Promise = global.Promise;
 mongoose.set('useNewUrlParser', true);
@@ -17,10 +18,7 @@ mongoose.connect(url, (err, res) => {
     else {
         console.log("La base de datos esta corriendo correctamente");
         app.listen(port, function () {
-            console.log("Servidor del api rest escuchando en http://localhost:" + port);
+            console.log("Servidor del api rest levantado");
         });
     }
 });
-
-//mongodb+srv://itproduction:ITEBM123+@mit-argentina.kwt3z.mongodb.net/dbmit-argentina?retryWrites=true&w=majority
-//mongodb://localhost:27017/mit-argentina

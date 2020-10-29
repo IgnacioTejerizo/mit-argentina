@@ -13,7 +13,6 @@ var UserSchema = Schema({
     username: String,
     password: String,
     role: String,
-    image: String,
     region: Number
 });
 

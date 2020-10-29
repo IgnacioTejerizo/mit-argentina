@@ -19,7 +19,6 @@ function saveUser(req, res) {
         user.phone = params.phone;
         user.username = params.username.toLowerCase();
         user.role = params.role;
-        user.image = 'null';
         user.region = params.region;
     
         if (params.password) {
@@ -64,7 +63,7 @@ function loginUser(req, res) {
                 res.status(500).send({ message: 'Error al obtener el usuario'});
             } else {
                 if (!user) {
-                    res.status(404).send({ message: 'El usuaio no existe'});
+                    res.status(404).send({ message: 'El usuario no existe'});
                 } else {
                     bcrypt.compare(password, user.password, function (err, check){
                         console.log(check);
@@ -115,65 +114,8 @@ function updateUser(req, res) {
     }
 }
 
-function uploadImage(req, res) {
-    try {
-        var userId = req.params.id;
-        var fileName = 'No subido..';
-    
-        if (req.files) {
-            var filePath = req.files.image.path;
-            var fileSplit = filePath.split('\\');
-            var fileName = fileSplit[2];
-            var extSplit = fileName.split('\.');
-            var fileExt = extSplit[1];
-            
-            if (fileExt == 'png' || fileExt == 'jpg' || fileExt == 'jpeg' || fileExt == 'gif') {
-                User.findByIdAndUpdate(userId, {image: fileName}, (err, userUpdated) => {
-                    if (err) {
-                        res.status(500).send({ message: 'Error al actualizar el usuario'});
-                    } else {
-                        if (!userUpdated) {
-                            res.status(404).send({ message: 'No se ha podido actualizar el usaurio'});
-                        } else {
-                            res.status(200).send({ image: fileName, user: userUpdated });
-                        }
-                    }
-                });
-            } else {
-                res.status(200).send({ message: 'El formato de la imagen es incorrecto' });
-            }
-            
-        } else {
-            res.status(200).send({ message: 'No has subido ninguna imagen' });
-        }
-    } catch (error) {
-        res.status(500).send({ message: 'Ocurrio un error en la Aplicacion, Por Favor Contacte con el Administrador'});
-        console.log(error);
-    }
-}
-
-function getImageFile(req, res) {
-    try {
-        var imageFile = req.params.imageFile;
-        var pathFile = './uploads/users/' + imageFile;
-    
-        fs.exists(pathFile, function(exists){
-            if (exists) {
-                res.sendFile(path.resolve(pathFile));
-            } else {
-                res.status(200).send({ message: 'No existe la imagen' });
-            }
-        });
-    } catch (error) {
-        res.status(500).send({ message: 'Ocurrio un error en la Aplicacion, Por Favor Contacte con el Administrador'});
-        console.log(error);
-    }
-}
-
 module.exports = {
     saveUser,
     loginUser,
-    updateUser,
-    uploadImage,
-    getImageFile
+    updateUser
 };
